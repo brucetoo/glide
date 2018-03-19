@@ -12,6 +12,7 @@ import javax.lang.model.element.TypeElement;
 /**
  * Writes Indexer classes annotated with {@link Index} for all
  * classes found annotated with {@link GlideExtension}.
+ * 为所有被GlideExtension注解的类生成 Index注解的Indexer类
  */
 final class ExtensionProcessor {
   private final ProcessorUtil processorUtil;

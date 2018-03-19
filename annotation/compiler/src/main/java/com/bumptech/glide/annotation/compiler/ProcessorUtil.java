@@ -77,8 +77,10 @@ final class ProcessorUtil {
   ProcessorUtil(ProcessingEnvironment processingEnv) {
     this.processingEnv = processingEnv;
 
+    //找到所有集成AppGlideModule的类
     appGlideModuleType =
         processingEnv.getElementUtils().getTypeElement(APP_GLIDE_MODULE_QUALIFIED_NAME);
+    //找到所有集成LibraryGlideModule的类
     libraryGlideModuleType =
         processingEnv.getElementUtils().getTypeElement(LIBRARY_GLIDE_MODULE_QUALIFIED_NAME);
   }
@@ -87,11 +89,13 @@ final class ProcessorUtil {
     round++;
   }
 
+  //检查某个TypeElement是否是AppGlideModule的子类
   boolean isAppGlideModule(TypeElement element) {
     return processingEnv.getTypeUtils().isAssignable(element.asType(),
         appGlideModuleType.asType());
   }
 
+  //
   boolean isLibraryGlideModule(TypeElement element) {
     return processingEnv.getTypeUtils().isAssignable(element.asType(),
         libraryGlideModuleType.asType());

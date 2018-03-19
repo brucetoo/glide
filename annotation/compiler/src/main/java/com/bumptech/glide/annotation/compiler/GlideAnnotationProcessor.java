@@ -75,16 +75,22 @@ public final class GlideAnnotationProcessor extends AbstractProcessor {
   @Override
   public synchronized void init(ProcessingEnvironment processingEnvironment) {
     super.init(processingEnvironment);
+    //注解处理器工具类定义
     processorUtil = new ProcessorUtil(processingEnvironment);
+    //包含一/多个LibraryGlideModules or GlideExtensions的空类
     IndexerGenerator indexerGenerator = new IndexerGenerator(processorUtil);
+    //LibraryModule注解生成工具类
     libraryModuleProcessor = new LibraryModuleProcessor(processorUtil, indexerGenerator);
+    //注解最后一步，生成最后的类
     appModuleProcessor = new AppModuleProcessor(processingEnvironment, processorUtil);
+    //生成Indexer类(Index注解)
     extensionProcessor =
         new ExtensionProcessor(processingEnvironment, processorUtil, indexerGenerator);
   }
 
   @Override
   public Set<String> getSupportedAnnotationTypes() {
+    //声明能被处理的注解类型： GlideModule 和 GlideExtension
     Set<String> result = new HashSet<>();
     result.addAll(libraryModuleProcessor.getSupportedAnnotationTypes());
     result.addAll(extensionProcessor.getSupportedAnnotationTypes());
@@ -109,15 +115,23 @@ public final class GlideAnnotationProcessor extends AbstractProcessor {
     *       Once the {@code GeneratedAppGlideModule} is written, we expect to be finished.
     *       Any further generation of related classes will result in errors.
     * </ol>
+    * 每轮干的事情：
+    * 1. 找到所有{@code GlideModule} 注解的 {@code AppGlideModule}
+    * 2. 找到所有{@code LibraryGlideModule}，对每个{@code LibraryGlideModule}生成一个由{@code Indexer}注解的类
+    * 3. ...
     */
   @Override
   public boolean process(Set<? extends TypeElement> set, RoundEnvironment env) {
 //    if (set.isEmpty() && !isGeneratedAppGlideModulePending) {
 //      return false;
 //    }
+    //累加执行的圈数
     processorUtil.process();
+    //libraryModule文件的生成
     boolean newModulesWritten = libraryModuleProcessor.processModules(env);
+
     boolean newExtensionWritten = extensionProcessor.processExtensions(env);
+    //创建唯一的appModule
     appModuleProcessor.processModules(set, env);
 
     if (newExtensionWritten || newModulesWritten) {

@@ -76,6 +76,7 @@ final class AppModuleProcessor {
     // current implementation.
     PackageElement glideGenPackage =
         processingEnv.getElementUtils().getPackageElement(COMPILER_PACKAGE_NAME);
+    //获取生成的Index集合
     FoundIndexedClassNames indexedClassNames = getIndexedClassNames(glideGenPackage);
 
     // Write all generated code to the package containing the AppGlideModule. Doing so fixes
@@ -122,6 +123,7 @@ final class AppModuleProcessor {
   private FoundIndexedClassNames getIndexedClassNames(PackageElement glideGenPackage) {
     Set<String> glideModules = new HashSet<>();
     Set<String> extensions = new HashSet<>();
+    //获取该包名下的所有类
     List<? extends Element> glideGeneratedElements = glideGenPackage.getEnclosedElements();
     for (Element indexer : glideGeneratedElements) {
       Index annotation = indexer.getAnnotation(Index.class);

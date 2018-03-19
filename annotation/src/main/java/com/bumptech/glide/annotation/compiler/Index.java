@@ -10,6 +10,7 @@ import java.lang.annotation.Target;
  * libraries and applications.
  *
  * <p>Part of the internals of Glide's annotation processor and not for public use.
+ * 用于在注解processor中获取 LibraryGlideModule 和 GlideExtension，不会暴露给外部使用
  */
 @Target(ElementType.TYPE)
 // Needs to be parsed from class files in JAR.
